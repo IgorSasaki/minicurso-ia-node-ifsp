@@ -1,0 +1,6 @@
+# O pnpm 12 só deixa pacotes rodarem scripts de instalação se você autorizar.
+# Liberamos apenas o esbuild (usado pelo `tsx` para executar TypeScript).
+allowBuilds:
+  esbuild: true
+  "@google/genai": false
+  protobufjs: false

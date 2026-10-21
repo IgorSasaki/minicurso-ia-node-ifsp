@@ -1,0 +1,13 @@
+{
+  "name": "Rota Tech — Minicurso IA + Node.js",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "containerEnv": { "COREPACK_ENABLE_DOWNLOAD_PROMPT": "0" },
+  "postCreateCommand": "sudo corepack enable && pnpm install && (cp -n .env.example .env || true)",
+  "forwardPorts": [3333],
+  "portsAttributes": {
+    "3333": { "label": "Rota Tech API", "onAutoForward": "openPreview" }
+  },
+  "customizations": {
+    "vscode": { "extensions": ["humao.rest-client", "biomejs.biome"] }
+  }
+}

@@ -1,0 +1,12 @@
+# Dependências (recriadas com `pnpm install`)
+node_modules/
+
+# Segredos: o .env tem a sua chave de API e NUNCA deve ir para o Git
+.env
+
+# Arquivos gerados pelo sistema / editores
+*.log
+.DS_Store
+
+# Dados pessoais do ministrante (currículos em PDF usados na preparação)
+*.pdf

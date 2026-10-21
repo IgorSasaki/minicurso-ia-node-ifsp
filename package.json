@@ -1,0 +1,27 @@
+{
+  "name": "rota-tech",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Rota Tech — mentor de carreira com IA. Projeto do minicurso 'Desenvolvimento de Aplicações Inteligentes com Node.js e IA Generativa' (Semana da Informática IFSP Araraquara).",
+  "author": "Igor Leonardo Sasaki da Silva Moreira (https://www.linkedin.com/in/igor-sasaki/)",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/IgorSasaki/minicurso-ia-node-ifsp.git" },
+  "homepage": "https://github.com/IgorSasaki/minicurso-ia-node-ifsp#readme",
+  "keywords": ["nodejs", "typescript", "gemini", "ia-generativa", "llm", "rag", "embeddings", "fastify", "zod", "minicurso", "ifsp"],
+  "type": "module",
+  "packageManager": "pnpm@12.11.2",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "hello": "tsx --env-file-if-exists=.env scripts/01-hello.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/genai": "^2.30.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
