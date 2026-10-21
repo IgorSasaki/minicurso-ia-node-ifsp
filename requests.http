@@ -59,3 +59,33 @@ Content-Type: application/json
 {
   "aboutMe": "Sou a Bia, 16 anos. Curto muito banco de dados e lógica, ganhei medalha na OBMEP. Não tenho pressa de trabalhar e posso estudar de manhã."
 }
+
+### Etapa 6 — RAG: pergunta sobre os cursos (compare com o /chat!)
+POST {{api}}/ask
+Content-Type: application/json
+
+{ "question": "Qual o turno do curso de ADS?" }
+
+### Etapa 6 — RAG: comparação
+POST {{api}}/ask
+Content-Type: application/json
+
+{ "question": "ADS ou SPI: qual é melhor pra quem precisa trabalhar de dia?" }
+
+### Etapa 6 — RAG: informação que NÃO está nos documentos
+POST {{api}}/ask
+Content-Type: application/json
+
+{ "question": "Qual o salário de um dev júnior?" }
+
+### Etapa 6 — RAG: fora do assunto (nem chama a LLM)
+POST {{api}}/ask
+Content-Type: application/json
+
+{ "question": "Quem ganhou a copa de 2002?" }
+
+### Etapa 6 — RAG: perguntas sobre o ministrante
+POST {{api}}/ask
+Content-Type: application/json
+
+{ "question": "Como o Igor começou na carreira?" }

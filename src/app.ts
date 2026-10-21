@@ -5,24 +5,28 @@
  *   - o servidor (server.ts) faz `app.listen()`;
  *   - os testes fazem `app.inject()`, simulando requisições sem abrir porta nenhuma.
  *
- * Todas as dependências externas (a IA) chegam por parâmetro. Nos testes,
+ * Todas as dependências externas (a IA e a busca nos documentos) chegam por parâmetro. Nos testes,
  * passamos versões falsas: sem chave, sem internet, sem gastar cota.
  */
 import Fastify, { type FastifyServerOptions } from 'fastify'
 import type { Llm } from './ai/llm.ts'
 import { handleError } from './http/errors.ts'
+import { askRoutes } from './http/routes/ask.ts'
 import { careerPlanRoutes } from './http/routes/career-plan.ts'
 import { chatRoutes } from './http/routes/chat.ts'
 import { zodValidatorCompiler } from './http/validation.ts'
+import type { Retriever } from './rag/retriever.ts'
 
 export type AppDependencies = {
   llm: Llm
+  /** Busca nos documentos (RAG). */
+  retrieve: Retriever
   /** Nome do modelo, só para exibir no /health. */
   modelName: string
   logger?: FastifyServerOptions['logger']
 }
 
-export async function buildApp({ llm, modelName, logger = true }: AppDependencies) {
+export async function buildApp({ llm, retrieve, modelName, logger = true }: AppDependencies) {
   // bodyLimit: recusamos corpos maiores que 64 KB (nenhuma rota precisa de mais que isso).
   const app = Fastify({ logger, bodyLimit: 64 * 1024 })
 
@@ -38,6 +42,7 @@ export async function buildApp({ llm, modelName, logger = true }: AppDependencie
 
   await app.register(chatRoutes, { llm })
   await app.register(careerPlanRoutes, { llm })
+  await app.register(askRoutes, { llm, retrieve })
 
   return app
 }
