@@ -6,6 +6,7 @@ Projeto do minicurso **"Desenvolvimento de Aplicações Inteligentes com Node.js
 cp .env.example .env      # cole sua GEMINI_API_KEY (https://aistudio.google.com/apikey)
 pnpm install
 pnpm hello                # etapa 1
+pnpm dev                  # API em http://localhost:3333 (etapa 2+)
 ```
 
 O guia de cada etapa está em [`docs/steps/`](docs/steps/).

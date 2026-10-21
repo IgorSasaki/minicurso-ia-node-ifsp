@@ -1,0 +1,45 @@
+### ============================================================
+### Requisições prontas para testar a API.
+### Use a extensão "REST Client" do VS Code: clique em "Send Request" acima de cada bloco.
+### ============================================================
+
+@api = http://localhost:3333
+
+### Saúde da API
+GET {{api}}/health
+
+### Etapa 2 — Chat com o mentor
+POST {{api}}/chat
+Content-Type: application/json
+
+{
+  "messages": [
+    { "role": "user", "text": "Estou no 3º ano do integrado. Vale mais a pena estágio ou faculdade?" }
+  ]
+}
+
+### Etapa 2 — Chat com histórico (a API não tem memória: o histórico vai junto)
+POST {{api}}/chat
+Content-Type: application/json
+
+{
+  "messages": [
+    { "role": "user", "text": "Meu nome é Ana e eu gosto de front-end." },
+    { "role": "model", "text": "Prazer, Ana! Front-end é uma ótima porta de entrada." },
+    { "role": "user", "text": "Qual é o meu nome e do que eu gosto?" }
+  ]
+}
+
+### Etapa 2 — Fora do escopo (deve recusar com educação)
+POST {{api}}/chat
+Content-Type: application/json
+
+{
+  "messages": [{ "role": "user", "text": "Me passa uma receita de bolo de cenoura" }]
+}
+
+### Etapa 2 — Corpo inválido (deve responder 400 com os detalhes)
+POST {{api}}/chat
+Content-Type: application/json
+
+{ "messages": [] }
