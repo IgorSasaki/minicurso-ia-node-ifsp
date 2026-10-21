@@ -11,6 +11,7 @@
 import Fastify, { type FastifyServerOptions } from 'fastify'
 import type { Llm } from './ai/llm.ts'
 import { handleError } from './http/errors.ts'
+import { careerPlanRoutes } from './http/routes/career-plan.ts'
 import { chatRoutes } from './http/routes/chat.ts'
 import { zodValidatorCompiler } from './http/validation.ts'
 
@@ -36,6 +37,7 @@ export async function buildApp({ llm, modelName, logger = true }: AppDependencie
   app.get('/health', async () => ({ status: 'ok', model: modelName }))
 
   await app.register(chatRoutes, { llm })
+  await app.register(careerPlanRoutes, { llm })
 
   return app
 }

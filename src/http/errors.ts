@@ -16,6 +16,7 @@
 import { ApiError } from '@google/genai'
 import type { FastifyError, FastifyReply, FastifyRequest } from 'fastify'
 import { ZodError } from 'zod'
+import { InvalidResponseError } from '../ai/llm.ts'
 
 /** Erro com status HTTP e uma mensagem que PODE ser mostrada ao usuário. */
 export class HttpError extends Error {
@@ -55,6 +56,12 @@ export function handleError(error: FastifyError, request: FastifyRequest, reply:
     // 400/401/403 do provedor = problema de configuração do SERVIDOR (ex.: chave inválida),
     // não do usuário. Por isso respondemos 502 ("o serviço do qual dependo falhou").
     return reply.status(502).send({ error: 'Não foi possível falar com o provedor de IA.' })
+  }
+
+  // A IA respondeu, mas o JSON não seguiu o schema nem depois da segunda tentativa
+  if (error instanceof InvalidResponseError) {
+    request.log.warn({ details: error.details }, 'resposta da IA fora do schema')
+    return reply.status(502).send({ error: 'A IA não conseguiu gerar uma resposta válida. Tente de novo.' })
   }
 
   // O cliente HTTP do Gemini desistiu depois de LLM_TIMEOUT_MS

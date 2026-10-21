@@ -8,6 +8,7 @@
  */
 import type { Content, GoogleGenAI } from '@google/genai'
 import { ThinkingLevel } from '@google/genai'
+import { z } from 'zod'
 
 /** Uma mensagem da conversa. No Gemini, os papéis são "user" (pessoa) e "model" (IA). */
 export type Message = { role: 'user' | 'model'; text: string }
@@ -22,6 +23,14 @@ export type ChatOptions = {
 export type LlmConfig = {
   model: string
   thinkingLevel?: keyof typeof ThinkingLevel
+}
+
+/** A IA respondeu, mas fora do formato combinado — mesmo depois de uma nova tentativa. */
+export class InvalidResponseError extends Error {
+  constructor(public readonly details: string) {
+    super('A IA não conseguiu gerar um JSON válido')
+    this.name = 'InvalidResponseError'
+  }
 }
 
 /** Só precisamos da parte `models` do cliente — isso facilita criar um cliente falso nos testes. */
@@ -54,8 +63,59 @@ export function createLlm(client: GeminiClient, { model, thinkingLevel }: LlmCon
     return response.text ?? ''
   }
 
-  return { chat }
+  /**
+   * Pede uma resposta em JSON que siga o schema zod — e CONFERE se seguiu mesmo.
+   * Se a validação falhar, tenta mais uma vez, mostrando o erro para o próprio modelo corrigir.
+   *
+   * O tipo de retorno vem do schema: `chatJson(msgs, careerPlanSchema)` devolve um `CareerPlan`.
+   */
+  async function chatJson<T extends z.ZodType>(
+    messages: Message[],
+    schema: T,
+    options: ChatOptions = {},
+  ): Promise<z.infer<T>> {
+    const contents = toContents(messages)
+    const responseJsonSchema = z.toJSONSchema(schema)
+    let lastError = ''
+
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      const response = await client.models.generateContent({
+        model,
+        contents,
+        config: {
+          // Temperatura mais baixa: queremos dados consistentes, não criatividade.
+          ...generationConfig({ temperature: 0.4, ...options }),
+          responseMimeType: 'application/json', // "responda em JSON..."
+          responseJsonSchema, // "...exatamente neste formato"
+        },
+      })
+
+      const text = response.text ?? ''
+      const result = schema.safeParse(parseJson(text))
+      if (result.success) return result.data
+
+      // Confie, mas confira: mostramos o erro ao modelo e pedimos para corrigir.
+      lastError = z.prettifyError(result.error)
+      contents.push(
+        { role: 'model', parts: [{ text }] },
+        { role: 'user', parts: [{ text: `Seu JSON não passou na validação: ${lastError}. Corrija e responda apenas o JSON.` }] },
+      )
+    }
+
+    throw new InvalidResponseError(lastError)
+  }
+
+  return { chat, chatJson }
 }
 
 /** O tipo do objeto devolvido por createLlm — usado por quem recebe a IA como dependência. */
 export type Llm = ReturnType<typeof createLlm>
+
+/** `JSON.parse` lança exceção com texto inválido; aqui devolvemos `undefined` e deixamos o zod reclamar. */
+function parseJson(text: string): unknown {
+  try {
+    return JSON.parse(text)
+  } catch {
+    return undefined
+  }
+}

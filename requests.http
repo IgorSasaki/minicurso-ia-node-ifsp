@@ -43,3 +43,19 @@ POST {{api}}/chat
 Content-Type: application/json
 
 { "messages": [] }
+
+### Etapa 3 — Plano de carreira em JSON
+POST {{api}}/career-plan
+Content-Type: application/json
+
+{
+  "aboutMe": "Sou o Lucas, 17 anos, 3º ano do integrado. Amo fazer sites e mexer com CSS, odeio matemática. Preciso começar a trabalhar logo pra ajudar em casa, então só poderia estudar à noite."
+}
+
+### Etapa 3 — Outro perfil
+POST {{api}}/career-plan
+Content-Type: application/json
+
+{
+  "aboutMe": "Sou a Bia, 16 anos. Curto muito banco de dados e lógica, ganhei medalha na OBMEP. Não tenho pressa de trabalhar e posso estudar de manhã."
+}
