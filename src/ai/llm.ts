@@ -18,6 +18,8 @@ export type ChatOptions = {
   system?: string
   /** 0 = previsível · 2 = muito criativo. */
   temperature?: number
+  /** Permite cancelar a geração no meio (ex.: o usuário fechou a aba). */
+  signal?: AbortSignal
 }
 
 export type LlmConfig = {
@@ -43,10 +45,11 @@ export function toContents(messages: Message[]): Content[] {
 
 export function createLlm(client: GeminiClient, { model, thinkingLevel }: LlmConfig) {
   /** Monta as opções comuns a todas as chamadas de geração de texto. */
-  function generationConfig({ system, temperature = 0.7 }: ChatOptions) {
+  function generationConfig({ system, temperature = 0.7, signal }: ChatOptions) {
     return {
       systemInstruction: system,
       temperature,
+      abortSignal: signal,
       // O spread condicional só adiciona `thinkingConfig` quando há um nível configurado.
       ...(thinkingLevel && { thinkingConfig: { thinkingLevel: ThinkingLevel[thinkingLevel] } }),
     }
@@ -105,7 +108,23 @@ export function createLlm(client: GeminiClient, { model, thinkingLevel }: LlmCon
     throw new InvalidResponseError(lastError)
   }
 
-  return { chat, chatJson }
+  /**
+   * Igual ao chat(), mas devolve a resposta em PEDAÇOS, conforme o modelo vai gerando.
+   * `async function*` é um gerador assíncrono: quem chama consome com `for await (const pedaco of ...)`.
+   */
+  async function* chatStream(messages: Message[], options: ChatOptions = {}): AsyncGenerator<string, void> {
+    const stream = await client.models.generateContentStream({
+      model,
+      contents: toContents(messages),
+      config: generationConfig(options),
+    })
+    for await (const chunk of stream) {
+      // Alguns pedaços chegam sem texto (só metadados): pulamos esses.
+      if (chunk.text) yield chunk.text
+    }
+  }
+
+  return { chat, chatJson, chatStream }
 }
 
 /** O tipo do objeto devolvido por createLlm — usado por quem recebe a IA como dependência. */

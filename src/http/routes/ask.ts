@@ -13,6 +13,7 @@ import { z } from 'zod'
 import type { Llm } from '../../ai/llm.ts'
 import { buildRagPrompt, NOT_FOUND_ANSWER, RAG_RULES } from '../../ai/prompts.ts'
 import type { Retriever } from '../../rag/retriever.ts'
+import { AI_RATE_LIMIT } from '../rate-limit.ts'
 
 export const askBodySchema = z.object({
   question: z.string().trim().min(3).max(500),
@@ -27,7 +28,7 @@ export type AskResponse = {
 export const askRoutes: FastifyPluginAsync<{ llm: Llm; retrieve: Retriever }> = async (app, { llm, retrieve }) => {
   app.post<{ Body: AskBody }>(
     '/ask',
-    { schema: { body: askBodySchema } },
+    { schema: { body: askBodySchema }, config: { rateLimit: AI_RATE_LIMIT } },
     async (request): Promise<AskResponse> => {
       const { question } = request.body
 

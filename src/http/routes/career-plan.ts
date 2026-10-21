@@ -13,6 +13,7 @@ import { z } from 'zod'
 import type { Llm } from '../../ai/llm.ts'
 import { MENTOR_PERSONA } from '../../ai/prompts.ts'
 import { careerPlanSchema } from '../../schemas/career-plan.ts'
+import { AI_RATE_LIMIT } from '../rate-limit.ts'
 
 export const careerPlanBodySchema = z.object({
   aboutMe: z.string().trim().min(20, 'Conte um pouco mais sobre você (mínimo 20 caracteres)').max(1500),
@@ -20,7 +21,9 @@ export const careerPlanBodySchema = z.object({
 type CareerPlanBody = z.infer<typeof careerPlanBodySchema>
 
 export const careerPlanRoutes: FastifyPluginAsync<{ llm: Llm }> = async (app, { llm }) => {
-  app.post<{ Body: CareerPlanBody }>('/career-plan', { schema: { body: careerPlanBodySchema } }, async (request) => {
+  const routeOptions = { schema: { body: careerPlanBodySchema }, config: { rateLimit: AI_RATE_LIMIT } }
+
+  app.post<{ Body: CareerPlanBody }>('/career-plan', routeOptions, async (request) => {
     // O retorno já é um objeto tipado (CareerPlan): dá para salvar no banco, mandar por
     // e-mail, mostrar num dashboard... É dado, não é texto.
     return llm.chatJson(

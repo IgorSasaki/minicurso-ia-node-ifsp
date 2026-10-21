@@ -1,0 +1,162 @@
+<!doctype html>
+<!--
+  Rota Tech — front-end de demonstração.
+
+  HTML, CSS e JavaScript puros: sem framework e sem etapa de build.
+    - Estrutura (este arquivo)  → o que aparece na tela
+    - Estilo  (css/app.css)     → a aparência
+    - Comportamento (js/*.js)   → módulos ES nativos do navegador (type="module")
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rota Tech</title>
+  <meta name="description" content="Mentor de carreira com IA — projeto do minicurso de Node.js e IA generativa do IFSP Araraquara" />
+
+  <!-- Fontes do Google: Space Grotesk (interface) e JetBrains Mono (código e rótulos) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="css/app.css" />
+
+  <script>
+    // Aplica o tema salvo ANTES de a página ser desenhada (evita "piscar" de claro para escuro).
+    // Fica inline de propósito: um arquivo externo carregaria tarde demais.
+    try {
+      const savedTheme = localStorage.getItem('rota-theme')
+      if (savedTheme) document.documentElement.dataset.theme = savedTheme
+    } catch {}
+  </script>
+  <!-- type="module": permite usar import/export entre arquivos JS, direto no navegador -->
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <!-- Ícones SVG reutilizáveis. Usamos SVG em vez de emojis: renderizam igual em qualquer sistema. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="m15.5 8.5-2 5-5 2 2-5 5-2z" /></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" /></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z" /><path d="M9 4v14M15 6v14" /></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5z" /><path d="M4 19a2 2 0 0 1 2-2h13" /></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" /></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h10" /></symbol>
+    <symbol id="i-search-off" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5M8.5 11h5" /></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4h11l-1.5 4L16 12H5" /></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01" /><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" /></symbol>
+  </svg>
+
+  <!-- ===================== Cabeçalho ===================== -->
+  <header class="topbar">
+    <div class="container">
+      <div class="brand">
+        <div class="brand-logo"><svg class="icon"><use href="#i-compass" /></svg></div>
+        <div>
+          <h1>Rota Tech</h1>
+          <p>Mentor de carreira com IA · IFSP Araraquara</p>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <!-- role="status": leitores de tela anunciam quando o conteúdo muda -->
+        <span class="status" id="status" role="status">conectando…</span>
+        <button class="icon-button" id="theme-toggle" type="button" aria-label="Alternar tema claro/escuro">
+          <svg class="icon"><use href="#i-sun" /></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- ===================== Abas (padrão ARIA "tablist") ===================== -->
+    <nav class="tabs" role="tablist" aria-label="Funcionalidades">
+      <button class="tab" role="tab" id="tab-chat" aria-controls="chat" aria-selected="true" data-tab="chat">
+        <svg class="icon"><use href="#i-chat" /></svg>Conversar
+      </button>
+      <button class="tab" role="tab" id="tab-career-plan" aria-controls="career-plan" aria-selected="false" tabindex="-1" data-tab="career-plan">
+        <svg class="icon"><use href="#i-map" /></svg>Meu plano
+      </button>
+      <button class="tab" role="tab" id="tab-ask" aria-controls="ask" aria-selected="false" tabindex="-1" data-tab="ask">
+        <svg class="icon"><use href="#i-book" /></svg><span>Perguntar<span class="label-long"> aos documentos</span></span>
+      </button>
+    </nav>
+
+    <!-- ===================== Conversar (etapas 2 e 7: POST /chat/stream) ===================== -->
+    <section class="panel" id="chat" role="tabpanel" aria-labelledby="tab-chat">
+      <div class="card chat">
+        <!-- Estado vazio: ninguém sabe o que perguntar para uma tela em branco -->
+        <div class="chat-empty" id="chat-empty">
+          <span class="eyebrow">Mentor de carreira</span>
+          <h3>Sobre o que você quer conversar?</h3>
+          <p>Estágio, faculdade, portfólio, primeiro emprego. O Rota Tech responde com dicas práticas e diz quando não sabe.</p>
+          <div class="suggestions" data-target="chat-input">
+            <button class="suggestion" type="button">Vale mais a pena estágio ou faculdade?</button>
+            <button class="suggestion" type="button">Como montar um portfólio sem experiência?</button>
+            <button class="suggestion" type="button">Por onde começo a estudar back-end?</button>
+          </div>
+        </div>
+        <!-- aria-live: leitores de tela leem as novas mensagens conforme chegam -->
+        <div class="messages" id="messages" aria-live="polite" hidden></div>
+        <form class="composer" id="chat-form">
+          <div class="composer-row">
+            <label class="sr-only" for="chat-input">Mensagem</label>
+            <textarea class="field" id="chat-input" rows="1" placeholder="Escreva sua pergunta…" autocomplete="off"></textarea>
+            <button class="button button-primary send-button" type="submit" aria-label="Enviar">
+              <svg class="icon"><use href="#i-send" /></svg>
+            </button>
+          </div>
+          <div class="composer-footer">
+            <span>Enter envia · Shift+Enter quebra linha · <span class="mono" id="history-counter">0/20</span> no histórico</span>
+            <button class="link-button" type="button" id="new-chat"><svg class="icon"><use href="#i-plus" /></svg>Nova conversa</button>
+          </div>
+        </form>
+        <div id="chat-error"></div>
+      </div>
+    </section>
+
+    <!-- ===================== Meu plano (etapa 3: POST /career-plan) ===================== -->
+    <section class="panel" id="career-plan" role="tabpanel" aria-labelledby="tab-career-plan" hidden>
+      <div class="panel-header">
+        <h2>Seu plano de carreira</h2>
+        <p>Descreva você em texto livre. A IA devolve um JSON validado com zod, e esta tela é montada a partir desses dados.</p>
+      </div>
+      <form class="card plan-form" id="plan-form">
+        <div class="plan-form-header">
+          <label for="plan-input">Sobre você</label>
+          <div class="suggestions" id="plan-examples">
+            <button class="suggestion" type="button" data-example="lucas">Exemplo: Lucas</button>
+            <button class="suggestion" type="button" data-example="bia">Exemplo: Bia</button>
+          </div>
+        </div>
+        <textarea class="field" id="plan-input" rows="4" maxlength="1500" placeholder="Idade, ano do curso, do que você gosta, se precisa trabalhar, em que turno pode estudar…"></textarea>
+        <div class="plan-form-footer">
+          <span class="counter" id="plan-counter">0 / 1500 · mínimo 20</span>
+          <button class="button button-primary" type="submit" id="plan-submit" disabled>Gerar meu plano</button>
+        </div>
+      </form>
+      <div id="plan-result" aria-live="polite"></div>
+    </section>
+
+    <!-- ===================== Perguntar aos documentos (etapa 6: POST /ask) ===================== -->
+    <section class="panel" id="ask" role="tabpanel" aria-labelledby="tab-ask" hidden>
+      <div class="panel-header">
+        <h2>Perguntar aos documentos</h2>
+        <p>Respostas baseadas apenas nos PPCs de ADS e SPI do IFSP Araraquara, no guia de estágio e nos guias de carreira, sempre com a fonte.</p>
+      </div>
+      <form class="ask-form" id="ask-form">
+        <label class="sr-only" for="ask-input">Pergunta</label>
+        <input class="field" id="ask-input" placeholder="Ex.: Qual o turno do curso de ADS?" autocomplete="off" />
+        <button class="button button-primary" type="submit">Perguntar</button>
+      </form>
+      <div class="suggestions" data-target="ask-input" style="margin-top: 12px">
+        <button class="suggestion" type="button">ADS ou SPI: qual é melhor pra quem precisa trabalhar de dia?</button>
+        <button class="suggestion" type="button">Qual o turno do curso de ADS?</button>
+        <button class="suggestion" type="button">Como o Igor começou na carreira?</button>
+        <button class="suggestion" type="button">Qual o salário de um dev júnior?</button>
+      </div>
+      <div id="ask-result" aria-live="polite"></div>
+    </section>
+  </main>
+</body>
+</html>
