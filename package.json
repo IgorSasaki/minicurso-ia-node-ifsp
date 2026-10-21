@@ -34,7 +34,12 @@
     "start": "tsx --env-file-if-exists=.env src/server.ts",
     "similarity": "tsx --env-file-if-exists=.env scripts/04-similarity.ts",
     "ingest": "tsx --env-file-if-exists=.env scripts/ingest.ts",
-    "typecheck": "tsc --noEmit"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "check": "pnpm typecheck && pnpm lint && pnpm test"
   },
   "dependencies": {
     "@fastify/rate-limit": "^11.2.1",
@@ -44,8 +49,10 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.15",
     "@types/node": "^22.20.5",
     "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "5.0.5"
   }
 }

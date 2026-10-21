@@ -1,0 +1,23 @@
+# Integração contínua: a cada push ou pull request, o GitHub roda as verificações abaixo.
+# Se alguma falhar, o commit aparece com um "X" vermelho — antes de chegar em produção.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4 # usa a versão do pnpm declarada em package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile # instala exatamente as versões do lockfile
+      - run: pnpm typecheck # tipos TypeScript
+      - run: pnpm lint # estilo e erros comuns (Biome)
+      - run: pnpm test # testes automatizados (Vitest) — sem chave e sem internet

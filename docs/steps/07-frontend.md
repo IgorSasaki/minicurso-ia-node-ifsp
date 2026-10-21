@@ -61,7 +61,7 @@ Se o limite valesse para tudo, recarregar a página 15 vezes bloquearia o usuár
 ## O JSON vira interface
 A aba "Meu plano" prova o ponto da etapa 3: como a resposta é **dado estruturado**, o front monta cards, etiquetas e listas — algo impossível com texto livre.
 
-![Plano](../img/shot-plano.png)
+![Plano](../img/shot-career-plan.png)
 
 ## Detalhes de UX que fazem diferença
 | Detalhe | Por quê |
@@ -78,7 +78,7 @@ A aba "Meu plano" prova o ponto da etapa 3: como a resposta é **dado estruturad
 | **Acessibilidade** | Abas navegáveis por setas, foco visível, `aria-live` nas respostas, contraste AA e `prefers-reduced-motion`. |
 | **Contador de caracteres** | Mostra o limite do zod (20 a 1500) antes de o usuário errar. |
 
-<table><tr><td><img src="../img/shot-mobile.png" alt="Versão mobile" width="260"></td><td><img src="../img/shot-claro.png" alt="Tema claro" width="520"></td></tr></table>
+<table><tr><td><img src="../img/shot-mobile.png" alt="Versão mobile" width="260"></td><td><img src="../img/shot-light.png" alt="Tema claro" width="520"></td></tr></table>
 
 ## Segurança no front: XSS
 Toda resposta da IA passa por `escapeHtml()` (em `public/js/format.js`) antes de entrar na página. Sem isso, uma resposta contendo `<img src=x onerror="...">` executaria código no navegador de quem estiver usando — o ataque chamado **XSS**. Regra: texto vindo de fora nunca entra em `innerHTML` sem ser escapado; quando possível, use `textContent`.

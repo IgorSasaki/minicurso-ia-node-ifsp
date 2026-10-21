@@ -101,7 +101,10 @@ export function createLlm(client: GeminiClient, { model, thinkingLevel }: LlmCon
       lastError = z.prettifyError(result.error)
       contents.push(
         { role: 'model', parts: [{ text }] },
-        { role: 'user', parts: [{ text: `Seu JSON não passou na validação: ${lastError}. Corrija e responda apenas o JSON.` }] },
+        {
+          role: 'user',
+          parts: [{ text: `Seu JSON não passou na validação: ${lastError}. Corrija e responda apenas o JSON.` }],
+        },
       )
     }
 

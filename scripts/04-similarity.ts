@@ -9,7 +9,14 @@ import { cosineSimilarity } from '../src/rag/similarity.ts'
 // `= []` é um valor padrão: se a API não devolver nada, seguimos com um vetor vazio em vez de quebrar.
 const [dogVector = []] = await embed(['cachorro'])
 console.log(`🔢 "cachorro" virou ${dogVector.length} números:`)
-console.log('   [', dogVector.slice(0, 6).map((n) => n.toFixed(4)).join(', '), ', ... ]\n')
+console.log(
+  '   [',
+  dogVector
+    .slice(0, 6)
+    .map((n) => n.toFixed(4))
+    .join(', '),
+  ', ... ]\n',
+)
 
 // 2) Palavras: significado parecido → vetores parecidos
 const [dog = [], hound = [], computer = []] = await embed(['cachorro', 'cão', 'computador'])

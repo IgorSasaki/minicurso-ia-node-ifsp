@@ -35,8 +35,7 @@ export function chunkMarkdown(source: string, markdown: string): Chunk[] {
 
   // O que vem antes do 1º "## " é a introdução (título e fontes) e é descartado.
   // Se o documento não tiver nenhuma seção, ele inteiro vira uma seção: nada pode sumir do índice.
-  const sections =
-    parts.length > 1 ? parts.slice(1) : [`${documentTitle}\n${markdown.replace(/^# .+$/m, '')}`]
+  const sections = parts.length > 1 ? parts.slice(1) : [`${documentTitle}\n${markdown.replace(/^# .+$/m, '')}`]
 
   const chunks: Chunk[] = []
   for (const section of sections) {

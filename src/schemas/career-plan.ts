@@ -19,9 +19,7 @@ export const careerPlanSchema = z.object({
   // `enum` limita os valores possíveis: o código pode fazer `if (plan.recommendedPath === 'spi_degree')`.
   recommendedPath: z
     .enum(['ads_degree', 'spi_degree', 'job_market'])
-    .describe(
-      'Principal caminho após o técnico integrado: graduação em ADS, graduação em SPI ou mercado de trabalho',
-    ),
+    .describe('Principal caminho após o técnico integrado: graduação em ADS, graduação em SPI ou mercado de trabalho'),
 
   rationale: z.string().describe('Por que esse caminho combina com o perfil, em até 3 frases, em português'),
 

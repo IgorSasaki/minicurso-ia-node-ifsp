@@ -76,7 +76,9 @@
   box-sizing: border-box;
 }
 /* Garante que `hidden` esconda mesmo elementos com display: flex/grid */
+/* `hidden` precisa vencer qualquer display: flex/grid dos componentes */
 [hidden] {
+  /* biome-ignore lint/complexity/noImportantStyles: intencional, veja o comentário acima */
   display: none !important;
 }
 html {
@@ -86,7 +88,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font: 16px/1.55 var(--font);
+  font: 16px / 1.55 var(--font);
 }
 button,
 input,
@@ -386,6 +388,7 @@ button {
   border-radius: 12px;
   background: color-mix(in srgb, var(--danger) 10%, transparent);
 }
+/* biome-ignore lint/style/noDescendingSpecificity: ícones em componentes diferentes nunca se sobrepõem */
 .alert .icon {
   color: var(--danger);
 }
@@ -665,6 +668,7 @@ button {
   background: var(--warn-soft);
   border-radius: 0 12px 12px 0;
 }
+/* biome-ignore lint/style/noDescendingSpecificity: ícones em componentes diferentes nunca se sobrepõem */
 .next-step .icon {
   color: var(--warn);
   margin-top: 3px;
@@ -691,7 +695,7 @@ button {
   padding: 16px 20px;
   border-top: 1px solid var(--line);
   overflow-x: auto;
-  font: 0.8rem/1.6 var(--mono);
+  font: 0.8rem / 1.6 var(--mono);
   color: var(--muted);
 }
 
@@ -799,6 +803,7 @@ button {
   border-style: dashed;
   box-shadow: none;
 }
+/* biome-ignore lint/style/noDescendingSpecificity: ícones em componentes diferentes nunca se sobrepõem */
 .not-found .icon {
   width: 28px;
   height: 28px;
@@ -847,10 +852,13 @@ button {
 }
 /* Respeita quem pediu ao sistema operacional para reduzir animações */
 @media (prefers-reduced-motion: reduce) {
+  /* A preferência de acessibilidade do usuário deve vencer qualquer animação */
   *,
   *::before,
   *::after {
+    /* biome-ignore lint/complexity/noImportantStyles: intencional, veja o comentário acima */
     animation: none !important;
+    /* biome-ignore lint/complexity/noImportantStyles: intencional, veja o comentário acima */
     transition: none !important;
   }
 }
