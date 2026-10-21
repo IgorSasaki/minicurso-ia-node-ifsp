@@ -6,6 +6,7 @@
  */
 import { GoogleGenAI } from '@google/genai'
 import { config } from '../config/config.ts'
+import { createEmbedder } from '../rag/embeddings.ts'
 import { createLlm } from './llm.ts'
 
 // Um único cliente para o app inteiro, usando o SDK oficial do Google.
@@ -23,3 +24,6 @@ export const llm = createLlm(gemini, {
   model: config.GEMINI_MODEL,
   thinkingLevel: config.GEMINI_THINKING_LEVEL,
 })
+
+// Etapa 4: a função que transforma textos em vetores (usada pelo RAG).
+export const embed = createEmbedder(gemini, config.GEMINI_EMBEDDING_MODEL)

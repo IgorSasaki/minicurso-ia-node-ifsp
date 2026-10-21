@@ -32,6 +32,7 @@
     "hello": "tsx --env-file-if-exists=.env scripts/01-hello.ts",
     "dev": "tsx watch --env-file-if-exists=.env src/server.ts",
     "start": "tsx --env-file-if-exists=.env src/server.ts",
+    "similarity": "tsx --env-file-if-exists=.env scripts/04-similarity.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
