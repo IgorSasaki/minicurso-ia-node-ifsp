@@ -11,7 +11,7 @@
 import type { FastifyPluginAsync } from 'fastify'
 import { z } from 'zod'
 import type { Llm } from '../../ai/llm.ts'
-import { MENTOR_PERSONA } from '../../ai/prompts.ts'
+import { CAREER_PLAN_INSTRUCTIONS } from '../../ai/prompts.ts'
 import { careerPlanSchema } from '../../schemas/career-plan.ts'
 import { AI_RATE_LIMIT } from '../rate-limit.ts'
 
@@ -29,7 +29,7 @@ export const careerPlanRoutes: FastifyPluginAsync<{ llm: Llm }> = async (app, { 
     return llm.chatJson(
       [{ role: 'user', text: `Monte um plano de carreira para este estudante:\n\n${request.body.aboutMe}` }],
       careerPlanSchema,
-      { system: MENTOR_PERSONA },
+      { system: CAREER_PLAN_INSTRUCTIONS },
     )
   })
 }

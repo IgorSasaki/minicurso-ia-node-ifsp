@@ -7,7 +7,14 @@
  */
 import { errorMessage, postJson } from './api.js'
 import { $, icon, showError } from './dom.js'
-import { AREA_LABELS, escapeHtml, PATH_LABELS } from './format.js'
+import {
+  AREA_LABELS,
+  escapeHtml,
+  HORIZON_LABELS,
+  PATH_LABELS,
+  RESOURCE_KIND_LABELS,
+  SKILL_KIND_LABELS,
+} from './format.js'
 
 /** Mesmos limites do schema zod no back-end: o usuário vê o limite antes de errar. */
 const MIN_LENGTH = 20
@@ -100,13 +107,48 @@ function renderPlan(plan) {
     (step, i) => `
       <li>
         <span class="step-number">${i + 1}</span>
-        <div><strong>${escapeHtml(step.topic)}</strong><span>${escapeHtml(step.reason)}</span></div>
+        <div>
+          <strong>${escapeHtml(step.topic)}</strong>
+          <span>${escapeHtml(step.reason)}</span>
+          <span class="how-to-start">Como começar: ${escapeHtml(step.howToStart)}</span>
+        </div>
       </li>`,
   )
 
   const technologies = plan.portfolioProject.technologies.map(
     (technology) => `<span class="tag neutral">${escapeHtml(technology)}</span>`,
   )
+
+  const alternative = PATH_LABELS[plan.alternativePath.path]?.title ?? plan.alternativePath.path
+
+  const milestones = plan.milestones.map(
+    (milestone, i) => `
+      <li>
+        <span class="step-number">${i + 1}</span>
+        <div><strong>${escapeHtml(HORIZON_LABELS[milestone.horizon] ?? milestone.horizon)}</strong><span>${escapeHtml(milestone.goal)}</span></div>
+      </li>`,
+  )
+
+  const skills = plan.skillsToDevelop.map(
+    (item) => `
+      <li>
+        <strong>${escapeHtml(item.skill)}</strong>
+        <span class="tag neutral">${escapeHtml(SKILL_KIND_LABELS[item.kind] ?? item.kind)}</span>
+        <span>${escapeHtml(item.why)}</span>
+      </li>`,
+  )
+
+  const resources = plan.resources.map(
+    (resource) => `
+      <li>
+        <strong>${escapeHtml(resource.name)}</strong>
+        <span class="tag neutral">${escapeHtml(RESOURCE_KIND_LABELS[resource.kind] ?? resource.kind)}</span>
+        <span>${escapeHtml(resource.why)}</span>
+      </li>`,
+  )
+
+  const curiosities = plan.exploreNext.map((topic) => `<li>${escapeHtml(topic)}</li>`)
+  const questions = plan.reflectionQuestions.map((question) => `<li>${escapeHtml(question)}</li>`)
 
   return `
     <div class="result fade-in">
@@ -117,6 +159,7 @@ function renderPlan(plan) {
         <h3>${escapeHtml(path.title)}</h3>
         <p class="detail">${escapeHtml(path.detail)} · <span class="mono">${escapeHtml(plan.recommendedPath)}</span></p>
         <p class="rationale">${escapeHtml(plan.rationale)}</p>
+        <p class="alternative"><strong>Plano B: ${escapeHtml(alternative)}.</strong> ${escapeHtml(plan.alternativePath.whenItFits)}</p>
         <div class="tags">${areas.join('')}</div>
       </div>
 
@@ -127,11 +170,43 @@ function renderPlan(plan) {
           <ol class="timeline">${steps.join('')}</ol>
         </div>
         <div class="card block">
+          <span class="eyebrow">Metas</span>
+          <h4>Onde chegar e quando</h4>
+          <ol class="timeline">${milestones.join('')}</ol>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card block">
           <span class="eyebrow">Projeto de portfólio</span>
           <h4>${escapeHtml(plan.portfolioProject.title)}</h4>
           <p style="margin:0 0 14px;color:var(--muted)">${escapeHtml(plan.portfolioProject.description)}</p>
           <div class="tags">${technologies.join('')}</div>
         </div>
+        <div class="card block">
+          <span class="eyebrow">Habilidades</span>
+          <h4>O que desenvolver</h4>
+          <ul class="plain-list">${skills.join('')}</ul>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card block">
+          <span class="eyebrow">Recursos gratuitos</span>
+          <h4>Onde aprender</h4>
+          <ul class="plain-list">${resources.join('')}</ul>
+        </div>
+        <div class="card block">
+          <span class="eyebrow">Para ir além</span>
+          <h4>Se bater a curiosidade</h4>
+          <ul class="plain-list">${curiosities.join('')}</ul>
+        </div>
+      </div>
+
+      <div class="card block">
+        <span class="eyebrow">Para pensar</span>
+        <h4>Perguntas do seu mentor</h4>
+        <ul class="plain-list">${questions.join('')}</ul>
       </div>
 
       <div class="next-step">
