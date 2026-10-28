@@ -22,7 +22,7 @@ biome.json                       # lint + formatação
 ## Os comandos
 | Comando | O que faz |
 |---|---|
-| `pnpm test` | roda os 48 testes (menos de 1 segundo) |
+| `pnpm test` | roda os 54 testes (menos de 1 segundo) |
 | `pnpm test:watch` | roda de novo a cada arquivo salvo — ótimo enquanto programa |
 | `pnpm lint` | aponta erros comuns e código fora do padrão |
 | `pnpm format` | corrige a formatação automaticamente |

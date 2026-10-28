@@ -56,13 +56,23 @@ curl -s -X POST localhost:3333/career-plan -H 'Content-Type: application/json' -
   "profileSummary": "Lucas é um estudante de 17 anos do 3º ano do técnico integrado...",
   "recommendedPath": "spi_degree",
   "rationale": "Como você precisa trabalhar durante o dia, o SPI à noite é ideal...",
+  "alternativePath": { "path": "job_market", "whenItFits": "Se a renda for urgente, um estágio vem primeiro..." },
   "interestAreas": ["front-end", "ux-ui"],
   "studyPath": [
-    { "order": 1, "topic": "JavaScript Avançado", "reason": "..." },
-    { "order": 2, "topic": "React", "reason": "..." },
-    { "order": 3, "topic": "Git e GitHub", "reason": "..." }
+    { "order": 1, "topic": "JavaScript Avançado", "reason": "...", "howToStart": "..." },
+    { "order": 2, "topic": "React", "reason": "...", "howToStart": "..." },
+    { "order": 3, "topic": "Git e GitHub", "reason": "...", "howToStart": "..." }
+  ],
+  "skillsToDevelop": [{ "skill": "Comunicação", "kind": "soft", "why": "..." }],
+  "milestones": [
+    { "horizon": "3_months", "goal": "Publicar o portfólio no GitHub" },
+    { "horizon": "6_months", "goal": "..." },
+    { "horizon": "12_months", "goal": "..." }
   ],
   "portfolioProject": { "title": "Portfólio Pessoal", "description": "...", "technologies": ["HTML5", "CSS3", "JavaScript"] },
+  "resources": [{ "name": "Documentação da MDN", "kind": "docs", "why": "..." }],
+  "exploreNext": ["Acessibilidade: ...", "Animações em CSS: ..."],
+  "reflectionQuestions": ["Como organizar a rotina à noite sem se esgotar?", "..."],
   "nextStepThisWeek": "Criar um perfil no LinkedIn..."
 }
 ```
