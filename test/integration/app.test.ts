@@ -8,9 +8,10 @@
 import { ApiError } from '@google/genai'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { InvalidResponseError } from '../../src/ai/llm.ts'
-import { NOT_FOUND_ANSWER, RAG_RULES } from '../../src/ai/prompts.ts'
+import { CAREER_PLAN_INSTRUCTIONS, NOT_FOUND_ANSWER, RAG_RULES } from '../../src/ai/prompts.ts'
 import { type AppDependencies, buildApp } from '../../src/app.ts'
-import { fakeLlm, fakeRetriever, searchResult } from '../helpers/fakes.ts'
+import { careerPlanSchema } from '../../src/schemas/career-plan.ts'
+import { fakeLlm, fakeRetriever, samplePlan, searchResult } from '../helpers/fakes.ts'
 
 let app: Awaited<ReturnType<typeof buildApp>> | undefined
 
@@ -159,11 +160,16 @@ describe('POST /ask (RAG)', () => {
 })
 
 describe('POST /career-plan', () => {
-  it('devolve o plano gerado pela IA', async () => {
-    const plan = { recommendedPath: 'spi_degree' }
-    await createApp({ llm: fakeLlm({ chatJson: vi.fn(async () => plan) as never }) })
+  it('devolve o plano gerado pela IA, pedido com o schema e as instruções de mentor', async () => {
+    const plan = samplePlan()
+    const llm = fakeLlm({ chatJson: vi.fn(async () => plan) as never })
+    await createApp({ llm })
     const response = await post('/career-plan', { aboutMe: 'Sou o Lucas, gosto de CSS e preciso trabalhar de dia.' })
     expect(response.json()).toEqual(plan)
+
+    const [, schema, options] = vi.mocked(llm.chatJson).mock.calls[0] ?? []
+    expect(schema).toBe(careerPlanSchema)
+    expect(options).toMatchObject({ system: CAREER_PLAN_INSTRUCTIONS })
   })
 
   it('recusa perfis curtos demais antes de gastar uma chamada de IA', async () => {

@@ -4,7 +4,7 @@
 ![Node.js 22+](https://img.shields.io/badge/node-%3E%3D22-339933?logo=node.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![Google Gemini](https://img.shields.io/badge/Google-Gemini-4285F4?logo=google&logoColor=white)
-![Testes](https://img.shields.io/badge/testes-48%20passando-3DDC97)
+![Testes](https://img.shields.io/badge/testes-54%20passando-3DDC97)
 ![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-green)
 
 Projeto do minicurso **"Desenvolvimento de Aplicações Inteligentes com Node.js e IA Generativa"**
@@ -151,8 +151,14 @@ curl -s -X POST localhost:3333/career-plan -H 'Content-Type: application/json' -
   "recommendedPath": "spi_degree",
   "rationale": "Como você precisa trabalhar durante o dia, o SPI à noite é ideal...",
   "interestAreas": ["front-end", "ux-ui"],
-  "studyPath": [{ "order": 1, "topic": "JavaScript", "reason": "..." }],
+  "alternativePath": { "path": "job_market", "whenItFits": "..." },
+  "studyPath": [{ "order": 1, "topic": "JavaScript", "reason": "...", "howToStart": "..." }],
+  "skillsToDevelop": [{ "skill": "Comunicação", "kind": "soft", "why": "..." }],
+  "milestones": [{ "horizon": "3_months", "goal": "..." }, { "horizon": "6_months", "goal": "..." }, { "horizon": "12_months", "goal": "..." }],
   "portfolioProject": { "title": "Portfólio Pessoal", "description": "...", "technologies": ["HTML5", "CSS3"] },
+  "resources": [{ "name": "Documentação da MDN", "kind": "docs", "why": "..." }],
+  "exploreNext": ["..."],
+  "reflectionQuestions": ["..."],
   "nextStepThisWeek": "Criar um perfil no LinkedIn..."
 }
 ```

@@ -54,3 +54,22 @@ export const AREA_LABELS = {
   games: 'Games',
   ai: 'IA',
 }
+
+export const HORIZON_LABELS = {
+  '3_months': 'Em 3 meses',
+  '6_months': 'Em 6 meses',
+  '12_months': 'Em 12 meses',
+}
+
+export const SKILL_KIND_LABELS = {
+  technical: 'Técnica',
+  soft: 'Comportamental',
+}
+
+export const RESOURCE_KIND_LABELS = {
+  course: 'Curso',
+  docs: 'Documentação',
+  community: 'Comunidade',
+  practice: 'Prática',
+  event: 'Evento',
+}
