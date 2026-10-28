@@ -16,9 +16,9 @@
 - [ ] Gerar uma **chave de API nova só para a aula** (e revogar depois — a chave usada na preparação foi compartilhada em chat).
 - [ ] Gravar um vídeo curto de cada demo (Plano B se a internet cair).
 - [ ] Exportar os slides em PDF (Plano B se o projetor não abrir o navegador).
-- [ ] Ensaio cronometrado do roteiro com os slides.
+- [ ] Ensaio cronometrado do roteiro com os slides (metas: sessão 1 em 65 min; sessões 2 e 3 em 80 min cada).
 
-## Dia (28/10) — chegar 45 min antes do início
+## Dia (28/10) — chegar às 12h15 (início 13h00; intervalos 14h05–14h30 e 15h50–16h30; fim 17h50)
 - [ ] Testar internet do lab: abrir um Codespace em um PC do laboratório.
 - [ ] Servidor `pnpm dev` rodando na versão `main` para a demo de abertura.
 - [ ] Abas abertas: slides · VS Code (fonte grande, tema claro para projetor) · `http://localhost:3333` · AI Studio.
